@@ -14,9 +14,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 import matplotlib.pyplot as plt
 import shutil
-matplotlib.use('Agg')
 
-# Config the matlotlib backend as plotting inline in IPython
 net_data = load("bvlc_alexnet.npy").item()
 
 DROPOUT = 0.5
@@ -29,17 +27,21 @@ batch_size = 50
 num_classes = 50
 label_id = 0
 
-train_dir = list()
-train_labels = list()
-train_dir_tmp = list()
+train_dir = list() 			# list directory of train images
+train_labels = list()		# list label of train images
+train_dir_tmp = list()		# it is used for shuffling train data
 train_labels_tmp = list()
-svm_dir = list()
-svm_labels = list()
-test_dir = list()
-test_labels = list()
-species_dict = dict()
+svm_dir = list()			# list directory of svm images
+svm_labels = list()			# list label of svm images
+test_dir = list()			# list directory of test images
+test_labels = list()		# list label of test images
+species_dict = dict()		# dictionary for species id. It map real species id to new neat id ([0, 1, 2, ..., 49])
 
-organ = 'branch'
+organ = sys.argv[1]			# leaf, flower, entire or branch
+
+if (organ not in ['leaf', 'flower', 'entire', 'branch']):
+    sys.exit('Plant argument must be leaf, flower, entire or branch')
+	
 data_folder = '../plant_data/' + organ
 file_id = '50_' + organ + '_pretrained'
 flag_train = False
@@ -67,7 +69,7 @@ for i in index_shuf:
     train_dir.append(train_dir_tmp[i])
     train_labels.append(train_labels_tmp[i])
 
-'''
+
 for sub_dir_flower in os.listdir(data_folder + '/SvmInput/'):
     for img in os.listdir(data_folder + '/SvmInput/' + sub_dir_flower):
         pic = Image.open(os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img))
@@ -89,7 +91,13 @@ for sub_dir_flower in os.listdir(data_folder + '/Testing/'):
         else:
             test_dir.append(os.path.join(data_folder + '/Testing/' + sub_dir_flower, img))
             test_labels.append(species_dict[sub_dir_flower])
+			
+# Un-comment this block if you want to use an available svm and test directory
 '''
+svm_dir = list()			# list directory of svm images
+svm_labels = list()			# list label of svm images
+test_dir = list()			# list directory of test images
+test_labels = list()		# list label of test images
 
 f = open(organ + '_test', 'r')
 for line in f:
@@ -102,16 +110,30 @@ for line in f:
     svm_dir.append(line.split(';')[0])
     svm_labels.append(species_dict[line.strip().split(';')[1]])
 f.close()
-
+'''
 
 print(len(train_dir))
 print(len(test_dir))
 print(len(svm_dir))
 
 def print_activations(t):
+	'''
+	print a tensor shape
+	:param t: is a tensor
+	'''
     print(t.op.name, ' ', t.get_shape().as_list())
 
 def dense_to_one_hot(labels_dense, num_classes):
+	'''
+	make the one-hot matrix for label list
+	input: a list of label id. For example [1, 2, 3]
+	output: a one-hot maxtrix. [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+	Note: you can do it in the tensorflow model, but I want to do it here because 
+	I use it for feeding the model. Therefor, my model can be sped up so much.
+	
+	:param t: is a tensor
+	'''
+	
     num_labels = labels_dense.shape[0]
     index_offset = np.arange(num_labels) * num_classes
     labels_one_hot = np.zeros((num_labels, num_classes))
@@ -119,14 +141,28 @@ def dense_to_one_hot(labels_dense, num_classes):
     return labels_one_hot
 
 def read_images_from_disk(input_queue):
+	'''
+	This function is used for reading images to tensors vector in tensorflow.
+	Input: a (directory, label) queue of some images
+	Output: a tensor vector for each image; a label list for each image
+	
+	:param input_queue: (directory, label) queue
+	'''
     label = input_queue[1]
     file_contents = tf.read_file(input_queue[0])
-    example = tf.image.decode_jpeg(file_contents, channels=3)
-    # example = tf.cast( example, tf.float32 )
+    example = tf.image.decode_jpeg(file_contents, channels=3)  #read image with jpge extension
     return example, label
 
 # weight initialization
 def weight_variable(shape, name):
+	'''
+	init weight variable for CNN model
+	Input: shape and name of our variable
+	Ouput:
+	
+	:param shape: the shape of the expect variable
+	:param shape: the name of the expect variable
+	'''
     initial = tf.truncated_normal(shape, stddev=0.01, name=name)
     return tf.Variable(initial)
 
@@ -170,8 +206,8 @@ train_accuracies = list()
 train_costs = list()
 validation_accuracies = list()
 x_range = list()
-print('Training ...')
 
+# CNN modeling
 graph = tf.Graph()
 with graph.as_default():
     y_test = np.asarray(test_labels)
@@ -191,7 +227,6 @@ with graph.as_default():
                                                      shuffle=False)
 
     x_test, y_test = read_images_from_disk(input_queue_test)
-    # x_test = tf.random_crop(x_test, [500, 500, 3], seed=None, name=None)
     x_test = tf.image.resize_images(x_test, [227, 227], method=1)
     # x_test = tf.image.per_image_whitening(x_test)
 
@@ -202,7 +237,6 @@ with graph.as_default():
                                                       shuffle=False)
 
     x_valid, y_valid = read_images_from_disk(input_queue_valid)
-    # x_valid = tf.random_crop(x_valid, [500, 500, 3], seed=None, name=None)
     x_valid = tf.image.resize_images(x_valid, [227, 227], method=1)
     x_valid, y_valid = tf.train.batch([x_valid, y_valid], batch_size=batch_size, allow_smaller_final_batch=True)
 
@@ -211,11 +245,9 @@ with graph.as_default():
                                                       shuffle=True)
 
     x_train, y_train = read_images_from_disk(input_queue_train)
-    # x_train = tf.random_crop(x_train, [500, 500, 3], seed=None, name=None)
     x_train = tf.image.resize_images(x_train, [227, 227], method=1)
     # x_train_rot = tf.image.rot90(x_train, k=1)
     # x_train = tf.image.per_image_whitening(x_train)
-    # x_train_batch, y_train_batch = tf.train.batch([x_train, y_train], batch_size=batch_size)
 
     x_train, y_train = tf.train.shuffle_batch([x_train, y_train], batch_size=batch_size, num_threads=4,
                                                           capacity=5000, min_after_dequeue=1000,
@@ -373,9 +405,6 @@ with graph.as_default():
     # Choose softmax or sigmoid cross entropy
     cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, y_))
 
-    # cross_entropy = -tf.reduce_mean(y_*tf.log(logits))
-    # optimisation function
-    # train_step = tf.train.AdamOptimizer(LEARNING_RATE).minimize(cross_entropy)
     regularizers = tf.nn.l2_loss(conv1W) + tf.nn.l2_loss(conv1b) + \
                    tf.nn.l2_loss(conv2W) + tf.nn.l2_loss(conv2b) + \
                    tf.nn.l2_loss(conv3W) + tf.nn.l2_loss(conv3b) + \
@@ -386,12 +415,12 @@ with graph.as_default():
                    tf.nn.l2_loss(fc8W) + tf.nn.l2_loss(fc8b)
 
     loss = tf.reduce_mean(cross_entropy + WEIGHT_DECAY * regularizers)
-
+	
+	# optimisation function
     global_step = tf.Variable(0)
     learning_rate = tf.train.exponential_decay(LEARNING_RATE, global_step, 1000, 0.65, staircase=True)
     train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step)
 
-    # Choose softmax or sigmoid scores
     correct_prediction = tf.equal(tf.argmax(tf.nn.softmax(logits), 1), tf.argmax(y_, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
     saver = tf.train.Saver()
@@ -399,7 +428,6 @@ with graph.as_default():
     with tf.device('/cpu:0'):
         logits_test = model(x_testdata)
 
-        # Choose softmax or sigmoid scores
         prediction_vector_score = tf.nn.softmax(logits_test)
         prediction_test = tf.argmax(prediction_vector_score, 1)
         accuracy_test = tf.reduce_mean(tf.cast(tf.equal(prediction_test, tf.argmax(y_testdata, 1)), 'float'))
@@ -407,6 +435,9 @@ with graph.as_default():
         top_5_accuracy = tf.reduce_mean(tf.cast(top_5_correct_prediction, 'float'))
 
 iter_per_epoch = len(train_dir) / batch_size + 1
+
+# Make a session for training CNN model
+print('Training ...')
 
 with tf.Session(graph=graph, config=tf.ConfigProto(log_device_placement=True)) as sess:
     sess.run(tf.global_variables_initializer())
@@ -416,23 +447,6 @@ with tf.Session(graph=graph, config=tf.ConfigProto(log_device_placement=True)) a
 
     if (flag_train):
         for i in range(TRAINING_ITERATIONS):
-            '''
-            if (i * batch_size % len(train_dir) + batch_size < len(train_dir)):
-                index = i * batch_size % len(train_dir)
-            else:
-                index = len(train_dir) - batch_size
-
-            xtrain = np.zeros((0, 227, 227, 3))
-            for idx in range(index, index + batch_size):
-                image = Image.open(train_dir[idx])
-                image = image.resize((227, 227), PIL.Image.ANTIALIAS)
-                image = np.asarray(image)
-                xtrain = np.append(xtrain, [image], axis=0)
-
-            ytrain = np.asarray(train_labels[index: index + batch_size])
-            ytrain = dense_to_one_hot(ytrain, num_classes)
-            '''
-
             xtrain, ytrain = sess.run([x_train, y_train])
             _, train_accuracy, cost =  sess.run([train_step, accuracy, loss], feed_dict={x: xtrain, y_: ytrain, keep_prob: 0.5})
 
