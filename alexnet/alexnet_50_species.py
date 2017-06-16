@@ -27,17 +27,17 @@ batch_size = 50
 num_classes = 50
 label_id = 0
 
-train_dir = list() 			# list directory of train images
-train_labels = list()		# list label of train images
-train_dir_tmp = list()		# it is used for shuffling train data
+train_dir = list() # list directory of train images
+train_labels = list() # list label of train images
+train_dir_tmp = list() # it is used for shuffling train data
 train_labels_tmp = list()
-svm_dir = list()			# list directory of svm images
-svm_labels = list()			# list label of svm images
-test_dir = list()			# list directory of test images
-test_labels = list()		# list label of test images
-species_dict = dict()		# dictionary for species id. It map real species id to new neat id ([0, 1, 2, ..., 49])
+svm_dir = list() # list directory of svm images
+svm_labels = list() # list label of svm images
+test_dir = list() # list directory of test images
+test_labels = list() # list label of test images
+species_dict = dict() # dictionary for species id. It map real species id to new neat id ([0, 1, 2, ..., 49])
 
-organ = sys.argv[1]			# leaf, flower, entire or branch
+organ = sys.argv[1] # leaf, flower, entire or branch
 
 if (organ not in ['leaf', 'flower', 'entire', 'branch']):
     sys.exit('Plant argument must be leaf, flower, entire or branch')
@@ -117,14 +117,14 @@ print(len(test_dir))
 print(len(svm_dir))
 
 def print_activations(t):
-	'''
+    '''
 	print a tensor shape
 	:param t: is a tensor
 	'''
     print(t.op.name, ' ', t.get_shape().as_list())
 
 def dense_to_one_hot(labels_dense, num_classes):
-	'''
+    '''
 	make the one-hot matrix for label list
 	input: a list of label id. For example [1, 2, 3]
 	output: a one-hot maxtrix. [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
@@ -141,7 +141,7 @@ def dense_to_one_hot(labels_dense, num_classes):
     return labels_one_hot
 
 def read_images_from_disk(input_queue):
-	'''
+    '''
 	This function is used for reading images to tensors vector in tensorflow.
 	Input: a (directory, label) queue of some images
 	Output: a tensor vector for each image; a label list for each image
@@ -155,7 +155,7 @@ def read_images_from_disk(input_queue):
 
 # weight initialization
 def weight_variable(shape, name):
-	'''
+    '''
 	init weight variable for CNN model
 	Input: shape and name of our variable
 	Ouput:
@@ -416,7 +416,7 @@ with graph.as_default():
 
     loss = tf.reduce_mean(cross_entropy + WEIGHT_DECAY * regularizers)
 	
-	# optimisation function
+    # optimisation function
     global_step = tf.Variable(0)
     learning_rate = tf.train.exponential_decay(LEARNING_RATE, global_step, 1000, 0.65, staircase=True)
     train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step)
@@ -512,13 +512,12 @@ with tf.Session(graph=graph, config=tf.ConfigProto(log_device_placement=True)) a
 
         for k in range(batch_size):
             for itt in range(len(valid_vector_score[k])):
-                fs.write(svm_dir[it * batch_size + k] + ' ' + str(svm_labels[it * batch_size + k]) + ' ' + str(itt + 1) + ' ' + str(
-                    valid_vector_score[k][itt]))
+                fs.write(svm_dir[it * batch_size + k] + ' ' + str(svm_labels[it * batch_size + k]) + ' ' + \
+                         str(itt + 1) + ' ' + str(valid_vector_score[k][itt]))
                 fs.write('\n')
 
-                fl.write(svm_dir[it * batch_size + k] + ' ' + str(svm_labels[it * batch_size + k]) + ' ' + str(
-                    itt + 1) + ' ' + str(
-                    valid_vector_logits[k][itt]))
+                fl.write(svm_dir[it * batch_size + k] + ' ' + str(svm_labels[it * batch_size + k]) + ' ' + \
+                         str(itt + 1) + ' ' + str(valid_vector_logits[k][itt]))
                 fl.write('\n')
     fs.close()
     fl.close()
