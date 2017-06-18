@@ -54,8 +54,8 @@ for sub_dir_flower in os.listdir(data_folder + '/Training/'):
             continue
         if (pic.format != 'JPEG'):
             continue
-            rgb_pic = pic.convert('RGB')
-            rgb_pic.save(os.path.join(data_folder + '/Training/' + sub_dir_flower, img))
+            # rgb_pic = pic.convert('RGB')
+            # rgb_pic.save(os.path.join(data_folder + '/Training/' + sub_dir_flower, img))
 
         train_dir_tmp.append(os.path.join(data_folder + '/Training/' + sub_dir_flower, img))
         train_labels_tmp.append(label_id)
@@ -75,8 +75,8 @@ for sub_dir_flower in os.listdir(data_folder + '/SvmInput/'):
         pic = Image.open(os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img))
         if (pic.format != 'JPEG'):
             print((os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img)))
-            #rgb_pic = pic.convert('RGB')
-            #rgb_pic.save(os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img))
+            # rgb_pic = pic.convert('RGB')
+            # rgb_pic.save(os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img))
         else:
             svm_dir.append(os.path.join(data_folder + '/SvmInput/' + sub_dir_flower, img))
             svm_labels.append(species_dict[sub_dir_flower])
@@ -86,8 +86,8 @@ for sub_dir_flower in os.listdir(data_folder + '/Testing/'):
         pic = Image.open(os.path.join(data_folder + '/Testing/' + sub_dir_flower, img))
         if (pic.format != 'JPEG'):
             print((os.path.join(data_folder + '/Testing/' + sub_dir_flower, img)))
-            #rgb_pic = pic.convert('RGB')
-            #rgb_pic.save(os.path.join(data_folder + '/Testing/' + sub_dir_flower, img))
+            # rgb_pic = pic.convert('RGB')
+            # rgb_pic.save(os.path.join(data_folder + '/Testing/' + sub_dir_flower, img))
         else:
             test_dir.append(os.path.join(data_folder + '/Testing/' + sub_dir_flower, img))
             test_labels.append(species_dict[sub_dir_flower])
@@ -435,7 +435,6 @@ with graph.as_default():
         top_5_accuracy = tf.reduce_mean(tf.cast(top_5_correct_prediction, 'float'))
 
 iter_per_epoch = len(train_dir) / batch_size + 1
-
 # Make a session for training CNN model
 print('Training ...')
 
