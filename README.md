@@ -1,7 +1,7 @@
 # latefusion
 
 ## Descriptions
-Plant Identification using combinations of multi-organ images.
+Plant Identification using combinations of multi-organ images. Fusion schemes are max scores, sum scores, product scores, classification based SVM and my Robust Hybrid Model. I  draw a cumulative match characteristic (CMC) curve in order to compare them. Besides that, this project also includes a pretrained AlexNet model.
 
 
 	./alexnet: AlexNet model to predict vector score for each single organ.
@@ -47,6 +47,8 @@ Then, we combine each pair of organ (leaf-flower, flower-entire, ...):
 
 * bvlc_alexnet.npy is the AlexNet's paremeters that pre-trained in ImageNet dataset. You can download it at http://www.cs.toronto.edu/~guerzhoy/tf_alexnet/
 
+
+## References
 
 ## Authors
 
