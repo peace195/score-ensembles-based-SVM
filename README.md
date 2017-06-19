@@ -2,10 +2,15 @@
 
 ## Descriptions
 Plant Identification using combinations of multi-organ images.
+
 	./alexnet: AlexNet model to predict vector score for each single organ.
+	
 	./plant_data: contains plant dataset: leaf, flower, branch, entire. We use 50 species from http://www.imageclef.org/lifeclef/2015/plant dataset.
+	
 	./fusion_data/single_organ_score: contains vector score for each single organ.
+	
 	./fusion_data/leaf_flower_50_species: contains vector score for each single organ. But each pair of 2 organs that choosen to combine has same id. Each file has format of content: <image id> <species id> <species id from 1-50> <species score equivalently>
+	
 	...
 ## Getting Started
 
