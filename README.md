@@ -12,7 +12,7 @@ Plant Identification using combinations of multi-organ images.
 	
 	./fusion_data/leaf_flower_50_species: contains vector score for each single organ. But each pair of 2 organs that choosen to combine has same id. Each file has format of content: <image id> <species id> <species id from 1-50> <species score equivalently>
 	
-	./fusion_two_organs.ipynb: combine leaf-flower, flower-entire, entire-leaf, branch-leaf, branch-flower, branch-entire in order to increase the accuracy of plant indentification.
+	./fusion_two_organs.ipynb: combine leaf-flower, flower-entire, entire-leaf, branch-leaf, branch-flower, branch-entire in order to increase the accuracy of plant indentification task.
 	
 ## Getting Started
 
