@@ -24,15 +24,23 @@ Using 50 species leaf, flower, branch, entire dataset from http://www.imageclef.
 * sklearn 0.18.1: http://scikit-learn.org/stable/
 ### Installing
 Firstly, we use AlexNet to export vector score for each single organ:
+
 	(1) ./alexnet/python alexnet_50_species.py leaf
+	
 	(2) ./alexnet/python alexnet_50_species.py flower
+	
 	(3) ./alexnet/python alexnet_50_species.py entire
+	
 	(4) ./alexnet/python alexnet_50_species.py branch
 
 Then, we combine each pair of organ (leaf-flower, flower-entire, ...):
+
 	(5) Open ipython notebook
+	
 	(6) Open fusion_two_organs.ipynb
+	
 	(7) Run each block in the notebook. 
+	
 	Note that: at block #2, replace (organ_1st = 'branch' and organ_2nd = 'entire') by which pair of organ you want to fusion.
 	
 ## Built With
