@@ -47,6 +47,8 @@ Then, we combine each pair of organ (leaf-flower, flower-entire, ...):
 
 * bvlc_alexnet.npy is the AlexNet's paremeters that pre-trained in ImageNet dataset. You can download it at http://www.cs.toronto.edu/~guerzhoy/tf_alexnet/
 
+## Results
+My late fusion method (RHF) shows the best performance with highest accuracy rate.
 
 ## References
 
