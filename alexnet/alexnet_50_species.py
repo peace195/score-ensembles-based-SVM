@@ -6,10 +6,10 @@ from numpy import *
 import os
 from pylab import *
 import numpy as np
-from PIL import Image
 import matplotlib
 import PIL
 from PIL import ImageFile
+from PIL import Image
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 import matplotlib.pyplot as plt
@@ -94,10 +94,10 @@ for sub_dir_flower in os.listdir(data_folder + '/Testing/'):
 			
 # Un-comment this block if you want to use an available svm and test directory
 '''
-svm_dir = list()			# list directory of svm images
-svm_labels = list()			# list label of svm images
-test_dir = list()			# list directory of test images
-test_labels = list()		# list label of test images
+svm_dir = list() # list directory of svm images
+svm_labels = list()	# list label of svm images
+test_dir = list() # list directory of test images
+test_labels = list() # list label of test images
 
 f = open(organ + '_test', 'r')
 for line in f:
