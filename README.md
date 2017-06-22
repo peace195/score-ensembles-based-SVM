@@ -3,16 +3,17 @@
 ## Descriptions
 Plant Identification using combinations of multi-organ images. Fusion schemes are max scores, sum scores, product scores, classification based SVM and my Robust Hybrid Model. I  draw a cumulative match characteristic (CMC) curve in order to compare them. Besides that, this project also includes a pretrained AlexNet model.
 
-
-	./alexnet: AlexNet model to predict vector score for each single organ.
 	
-	./plant_data: contains plant dataset: leaf, flower, branch, entire. We use 50 species from http://www.imageclef.org/lifeclef/2015/plant dataset. It is too big so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhdt.hust@gmail.com.
-	
-	./fusion_data/single_organ_score: contains vector score for each single organ.
-	
-	./fusion_data/leaf_flower_50_species: contains vector score for each single organ. But each pair of 2 organs that choosen to combine has same id. Each file has format of content: <image id> <species id> <species id from 1-50> <species score equivalently>
-	
-	./fusion_two_organs.ipynb: combine leaf-flower, flower-entire, entire-leaf, branch-leaf, branch-flower, branch-entire in order to increase the accuracy of plant indentification task.
+	|__alexnet: AlexNet model to predict vector score for each single organ.
+	|
+	|__plant_data: contains plant dataset: leaf, flower, branch, entire. We use 50 species from http://www.imageclef.org/lifeclef/2015/plant dataset. It is too big so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhdt.hust@gmail.com.
+	|
+	|__fusion_data
+	|  |__single_organ_score: contains vector score for each single organ.
+	|  |	
+	|  |__leaf_flower_50_species: contains vector score for each single organ. But each pair of 2 organs that choosen to combine has same id. Each file has format of content: <image id> <species id> <species id from 1-50> <species score equivalently>
+	|
+	|__fusion_two_organs.ipynb: combine leaf-flower, flower-entire, entire-leaf, branch-leaf, branch-flower, branch-entire in order to increase the accuracy of plant indentification task.
 	
 ## Getting Started
 
@@ -25,13 +26,13 @@ Using 50 species leaf, flower, branch, entire dataset from http://www.imageclef.
 ### Installing
 Firstly, we use AlexNet to export vector score for each single organ:
 
-	(1) ./alexnet/python alexnet_50_species.py leaf
+	(1) ./alexnet/python alexnet_50_species.py --organ leaf
 	
-	(2) ./alexnet/python alexnet_50_species.py flower
+	(2) ./alexnet/python alexnet_50_species.py --organ flower
 	
-	(3) ./alexnet/python alexnet_50_species.py entire
+	(3) ./alexnet/python alexnet_50_species.py --organ entire
 	
-	(4) ./alexnet/python alexnet_50_species.py branch
+	(4) ./alexnet/python alexnet_50_species.py --organ branch
 
 Then, we combine each pair of organ (leaf-flower, flower-entire, ...):
 

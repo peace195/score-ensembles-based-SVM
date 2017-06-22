@@ -37,11 +37,15 @@ test_dir = list() # list directory of test images
 test_labels = list() # list label of test images
 species_dict = dict() # dictionary for species id. It map real species id to new neat id ([0, 1, 2, ..., 49])
 
-organ = sys.argv[1] # leaf, flower, entire or branch
+opt = sys.argv[1] #option
+organ = sys.argv[2] # leaf, flower, entire or branch
 
-if (organ not in ['leaf', 'flower', 'entire', 'branch']):
-    sys.exit('Plant argument must be leaf, flower, entire or branch')
-	
+if (opt == '--organ'):
+    if (organ not in ['leaf', 'flower', 'entire', 'branch']):
+        sys.exit('Plant argument must be leaf, flower, entire or branch')
+else:
+    sys.exit('option ' + opt + ' does not exist, please choose: --organ')
+
 data_folder = '../plant_data/' + organ
 file_id = '50_' + organ + '_pretrained'
 flag_train = False
