@@ -55,7 +55,7 @@ My late fusion method (RHF) shows the best performance with highest accuracy rat
 
 ## Authors
 
-* **Binh Thanh Do** 
+**Binh Thanh Do** 
 
 ## License
 
