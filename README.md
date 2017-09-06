@@ -18,7 +18,7 @@ Plant Identification using combinations of multi-organ images. Fusion schemes ar
 ## Getting Started
 
 ### Data
-Using 50 species leaf, flower, branch, entire dataset from http://www.imageclef.org/lifeclef/2015/plant . It is too big so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhdt.hust@gmail.com.
+I used 50 species leaf, flower, branch, entire dataset from http://www.imageclef.org/lifeclef/2015/plant . It is too big, so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhdt.hust@gmail.com.
 ### Prerequisites
 * python 2.7
 * tensorflow 0.12.1: https://www.tensorflow.org/versions/r0.12/get_started/os_setup#download-and-setup
@@ -46,7 +46,7 @@ Then, we combine each pair of organ (leaf-flower, flower-entire, ...):
 	
 ## Built With
 
-* bvlc_alexnet.npy is the AlexNet's paremeters that pre-trained in ImageNet dataset. You can download it at http://www.cs.toronto.edu/~guerzhoy/tf_alexnet/
+* bvlc_alexnet.npy is the AlexNet's parameters that pre-trained in the ImageNet dataset. You can download it at http://www.cs.toronto.edu/~guerzhoy/tf_alexnet/
 
 ## Results
 My late fusion method (RHF) shows the best performance with highest accuracy rate.
