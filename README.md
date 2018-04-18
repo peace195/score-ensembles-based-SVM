@@ -6,7 +6,7 @@ Plant Identification using combinations of multi-organ images. Fusion schemes ar
 	
 	|__alexnet: AlexNet model to predict vector score for each single organ.
 	|
-	|__plant_data: contains plant dataset: leaf, flower, branch, entire. We use 50 species from http://www.imageclef.org/lifeclef/2015/plant dataset. It is too big so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhdt.hust@gmail.com.
+	|__plant_data: contains plant dataset: leaf, flower, branch, entire. We use 50 species from http://www.imageclef.org/lifeclef/2015/plant dataset. It is too big so I can not push it all here. If you are interested in it, do not hesitate to contact me at binhtd.hust@gmail.com.
 	|
 	|__fusion_data
 	|  |__single_organ_score: contains vector score for each single organ.
