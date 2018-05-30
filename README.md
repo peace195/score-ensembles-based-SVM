@@ -1,6 +1,9 @@
 # latefusion
 
 ## Descriptions
+
+https://ieeexplore.ieee.org/document/8119457/
+
 Plant Identification using combinations of multi-organ images. Fusion schemes are max scores, sum scores, product scores, classification based SVM and my Robust Hybrid Model. I  draw a cumulative match characteristic (CMC) curve in order to compare them. Besides that, this project also includes a pretrained AlexNet model.
 
 	
